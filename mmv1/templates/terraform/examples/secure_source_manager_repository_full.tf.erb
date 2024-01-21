@@ -1,0 +1,19 @@
+resource "google_secure_source_manager_instance" "my_instance" {
+  location = "us-central1"
+  instance_id = "<%= ctx[:vars]['instance_id'] %>"
+  labels = {
+    "foo" = "bar"
+  }
+}
+
+resource "google_secure_source_manager_repository" "<%= ctx[:primary_resource_id] %>" {
+  instance = google_secure_source_manager_instance.my_instance.name
+  repository_id = "<%= ctx[:vars]['respository_id'] %>"
+  description = "<%= ctx[:vars]['description'] %>"
+  initial_config {
+    default_branch = "<%= ctx[:vars]['initial_config']['default_branch'] %>"
+    gitignores = <%= ctx[:vars]['initial_config']['gitignores'] %>
+    license = "<%= ctx[:vars]['initial_config']['license'] %>"
+    readme = "<%= ctx[:vars]['initial_config']['readme'] %>"
+  }
+}
